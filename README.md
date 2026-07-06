@@ -191,11 +191,12 @@ services:
       SERVER_INI: "TacticalOps-Server.ini"
       EXTRA_PARAMS: ""
       SYSTEM_DIR: "/server/System"
-
+      
+      # Optional WebAdmin variables
       ENABLE_WEBADMIN: "true"
       WEBADMIN_PORT: "5080"
       WEBADMIN_USER: "admin"
-      WEBADMIN_PASSWORD: "change-me"
+      WEBADMIN_PASSWORD: "change-me" # Definitely change this password before exposing WebAdmin.
 
     volumes:
       - /mnt/user/appdata/tacticalops34/server:/server:rw
@@ -234,11 +235,12 @@ services:
       SERVER_INI: "TacticalOps-Server.ini"
       EXTRA_PARAMS: ""
       SYSTEM_DIR: "/server/System"
-
+      
+      # Optional WebAdmin variables
       ENABLE_WEBADMIN: "true"
       WEBADMIN_PORT: "5080"
       WEBADMIN_USER: "admin"
-      WEBADMIN_PASSWORD: "change-me"
+      WEBADMIN_PASSWORD: "change-me" # Definitely change this password before exposing WebAdmin.
 
     volumes:
       - /mnt/user/appdata/tacticalops34/server:/server:rw
@@ -249,7 +251,7 @@ services:
 
     networks:
       br0:
-        ipv4_address: 192.168.1.100
+        ipv4_address: 192.168.1.100 # Change to LAN IP you want to assign to the container.
 
 networks:
   br0:
