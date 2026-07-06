@@ -220,6 +220,12 @@ services:
       EXTRA_PARAMS: ""
       SYSTEM_DIR: "/server/System"
 
+      # Webui variables:
+      ENABLE_WEBADMIN: "true"
+      WEBADMIN_PORT: "5080"
+      WEBADMIN_USER: "admin" # Webadmin user, you can change this to something you like.
+      WEBADMIN_PASSWORD: "change-me" # Definately change the password before exposing to the internet!
+
     volumes:
       # Host path : Container path
       # Change the host path (left side, everything before *:/server:rw*) to your own path
