@@ -146,3 +146,6 @@ networks:
 ```
 Change `/mnt/user/appdata/tacticalops34/server` to the location where you want to store the persistent Tactical Ops server files on your Unraid server.
 When using `br0`, port mappings are usually not required because the container has its own IP address.
+
+## Quirks
+If the game window or mouse behaves strangely on modern Windows, enable: TacticalOps.exe → Properties → Compatibility → Change high DPI settings → Override high DPI scaling behavior → Application. This is a client-side thing.
