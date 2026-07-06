@@ -108,6 +108,61 @@ Logs:
 docker logs -f tactical-ops-aot-34-docker
 
 ```
+## Portainer
+
+There are two common ways to use this with Portainer.
+
+### Option A: Git repository stack
+
+Create a new Portainer stack and choose **Git Repository** as the deployment method.
+
+Use:
+
+```text
+Repository URL:
+https://github.com/sin7ek/tactical-ops-aot-34-docker.git
+
+Repository reference:
+refs/heads/main
+
+Compose path:
+docker-compose.yml
+```
+
+This allows Portainer to build the image from the included `Dockerfile`.
+
+### Option B: Web editor with local build path
+
+If you use the Portainer **Web editor**, `build: .` will not work unless Portainer can access the build directory.
+
+For example, on Unraid you can clone this repository to:
+
+```bash
+mkdir -p /mnt/user/appdata/tacticalops34
+cd /mnt/user/appdata/tacticalops34
+git clone https://github.com/sin7ek/tactical-ops-aot-34-docker.git build
+```
+
+If your Portainer container has `/mnt/user/appdata` mounted as `/appdata`, use this in your stack:
+
+```yaml
+build: /appdata/tacticalops34/build
+```
+
+The server files can then be stored separately:
+
+```yaml
+volumes:
+  - /appdata/tacticalops34/server:/server:rw
+```
+
+This keeps the Docker build files and the persistent game server files separated:
+
+```text
+/appdata/tacticalops34/build   = Dockerfile, start.sh and compose files
+/appdata/tacticalops34/server  = downloaded Tactical Ops server files
+```
+
 ## Unraid with br0 / custom LAN IP
 
 If you run this on Unraid and want the server to have its own LAN IP address, you can use a custom Docker network such as `br0`.
@@ -117,7 +172,7 @@ Example:
 ```yaml
 services:
   tactical-ops-aot-34-docker:
-    build: .
+    build: /appdata/tacticalops34/build/
     image: tactical-ops-aot-34-docker:local
     container_name: tactical-ops-aot-34-docker
     restart: unless-stopped
@@ -133,7 +188,7 @@ services:
     volumes:
       # Host path : Container path
       # Change the host path (left side, everything before *:/server:rw*) to your own path
-      - /mnt/user/appdata/tacticalops34/server:/server:rw
+      - /appdata/tacticalops34/server:/server:rw
 
     labels:
       net.unraid.docker.webui: "http://[IP]:[PORT:5080]/"
@@ -146,8 +201,8 @@ services:
 networks:
   br0:
     external: true
-
 ```
+
 Change `/mnt/user/appdata/tacticalops34/server` to the location where you want to store the persistent Tactical Ops server files on your Unraid server.
 When using `br0`, port mappings are usually not required because the container has its own IP address.
 
