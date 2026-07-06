@@ -1,0 +1,30 @@
+# Git metadata
+.git/
+.gitignore
+
+# GitHub metadata
+.github/
+
+# Local server files
+server/
+Server/
+TO340Server/
+Logs/
+System/
+Maps/
+Music/
+Sounds/
+Textures/
+Web/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.old
+.DS_Store
+Thumbs.db
+
+# Local compose overrides
+docker-compose.override.yml
+.env
