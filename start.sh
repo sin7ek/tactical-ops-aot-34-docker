@@ -8,6 +8,11 @@ SERVER_INI="${SERVER_INI:-TacticalOps-Server.ini}"
 EXTRA_PARAMS="${EXTRA_PARAMS:-}"
 SYSTEM_DIR="${SYSTEM_DIR:-/server/System}"
 
+ENABLE_WEBADMIN="${ENABLE_WEBADMIN:-false}"
+WEBADMIN_PORT="${WEBADMIN_PORT:-5080}"
+WEBADMIN_USER="${WEBADMIN_USER:-admin}"
+WEBADMIN_PASSWORD="${WEBADMIN_PASSWORD:-admin}"
+
 echo "=================================================="
 echo " Tactical Ops: Assault on Terror 3.4 Docker"
 echo "=================================================="
@@ -18,6 +23,8 @@ echo "Map: ${MAP}"
 echo "Game: ${GAME}"
 echo "INI: ${SERVER_INI}"
 echo "Extra params: ${EXTRA_PARAMS}"
+echo "WebAdmin enabled: ${ENABLE_WEBADMIN}"
+echo "WebAdmin port: ${WEBADMIN_PORT}"
 echo "=================================================="
 
 if [ ! -f "${SYSTEM_DIR}/ucc-bin" ]; then
@@ -55,6 +62,70 @@ if [ ! -f "${SYSTEM_DIR}/ucc-bin" ]; then
   echo "Current /server contents:"
   find /server -maxdepth 3 -type d | sort
   exit 1
+fi
+
+INI_PATH="${SYSTEM_DIR}/${SERVER_INI}"
+DEFAULT_INI_PATH="${SYSTEM_DIR}/Default.ini"
+
+if [ "${ENABLE_WEBADMIN}" = "true" ]; then
+  echo "Configuring WebAdmin..."
+
+  if [ ! -f "${INI_PATH}" ]; then
+    echo "WARNING: Server INI not found: ${INI_PATH}"
+  else
+    # Enable UWeb.WebServer actor if it is commented out.
+    if grep -qE '^[[:space:]]*;[[:space:]]*ServerActors=UWeb\.WebServer' "${INI_PATH}"; then
+      sed -i -E 's/^[[:space:]]*;[[:space:]]*ServerActors=UWeb\.WebServer/ServerActors=UWeb.WebServer/' "${INI_PATH}"
+      echo "Enabled existing UWeb.WebServer actor."
+    elif grep -qE '^[[:space:]]*ServerActors=UWeb\.WebServer' "${INI_PATH}"; then
+      echo "UWeb.WebServer actor already enabled."
+    else
+      sed -i '/^\[Engine\.GameEngine\]/a ServerActors=UWeb.WebServer' "${INI_PATH}"
+      echo "Added UWeb.WebServer actor to [Engine.GameEngine]."
+    fi
+
+    # Add or update WebAdmin config section.
+    if ! grep -qE '^\[UWeb\.WebServer\]' "${INI_PATH}"; then
+      cat >> "${INI_PATH}" <<EOF
+
+[UWeb.WebServer]
+Applications[0]=UTServerAdmin.UTServerAdmin
+ApplicationPaths[0]=/ServerAdmin
+Applications[1]=UTServerAdmin.UTImageServer
+ApplicationPaths[1]=/images
+DefaultApplication=0
+bEnabled=True
+ListenPort=${WEBADMIN_PORT}
+ServerName=TO3.4 Server WebAdmin
+EOF
+      echo "Added [UWeb.WebServer] section."
+    else
+      sed -i -E "/^\[UWeb\.WebServer\]/,/^\[/ s/^bEnabled=.*/bEnabled=True/" "${INI_PATH}"
+      sed -i -E "/^\[UWeb\.WebServer\]/,/^\[/ s/^ListenPort=.*/ListenPort=${WEBADMIN_PORT}/" "${INI_PATH}"
+      echo "Updated existing [UWeb.WebServer] section."
+    fi
+  fi
+
+  # Update Default.ini credentials when available.
+  # Some UT/TO WebAdmin builds use Default.ini instead of the active server INI.
+  if [ -f "${DEFAULT_INI_PATH}" ]; then
+    if grep -qE '^AdminUsername=' "${DEFAULT_INI_PATH}"; then
+      sed -i -E "s/^AdminUsername=.*/AdminUsername=${WEBADMIN_USER}/" "${DEFAULT_INI_PATH}"
+    else
+      echo "AdminUsername not found in Default.ini; leaving username unchanged."
+    fi
+
+    if grep -qE '^AdminPassword=' "${DEFAULT_INI_PATH}"; then
+      sed -i -E "s/^AdminPassword=.*/AdminPassword=${WEBADMIN_PASSWORD}/" "${DEFAULT_INI_PATH}"
+    else
+      echo "AdminPassword not found in Default.ini; leaving password unchanged."
+    fi
+  else
+    echo "WARNING: Default.ini not found: ${DEFAULT_INI_PATH}"
+  fi
+
+  echo "WebAdmin configured."
+  echo "WebAdmin URL: http://SERVER-IP:${WEBADMIN_PORT}/ServerAdmin/"
 fi
 
 cd "${SYSTEM_DIR}"
