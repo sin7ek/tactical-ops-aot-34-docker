@@ -62,50 +62,14 @@ server/
 
 ## WebAdmin
 
-The classic UT/TO WebAdmin is available only if it is enabled in the server config.
+WebAdmin can be enabled automatically with environment variables in docker-compose.yml:
 
-Open:
-
-```text
-System/TacticalOps-Server.ini
-```
-
-In the `[Engine.GameEngine]` section, make sure this line is enabled:
-
-```ini
-ServerActors=UWeb.WebServer
-```
-
-If it exists with a semicolon in front of it, remove the semicolon:
-
-```ini
-;ServerActors=UWeb.WebServer
-```
-
-becomes:
-
-```ini
-ServerActors=UWeb.WebServer
-```
-
-Also make sure this section exists in `System/TacticalOps-Server.ini`:
-
-```ini
-[UWeb.WebServer]
-Applications[0]=UTServerAdmin.UTServerAdmin
-ApplicationPaths[0]=/ServerAdmin
-Applications[1]=UTServerAdmin.UTImageServer
-ApplicationPaths[1]=/images
-DefaultApplication=0
-bEnabled=True
-ListenPort=5080
-ServerName=TO3.4 Server WebAdmin
-```
-
-Restart the container after changing the config:
-
-```bash
-docker restart tactical-ops-aot-34-docker
+```yaml
+environment:
+  ENABLE_WEBADMIN: "true"
+  WEBADMIN_PORT: "5080"
+  WEBADMIN_USER: "admin"
+  WEBADMIN_PASSWORD: "change-me"
 ```
 
 Then open:
@@ -114,29 +78,16 @@ Then open:
 http://SERVER-IP:5080/ServerAdmin/
 ```
 
-For bridge networking, make sure TCP port `5080` is published in Docker Compose:
+For bridge networking, publish TCP port `5080` (and above mentioned ports `7777`, `7778`, `7779`, `6665`):
 
 ```yaml
 ports:
   - "5080:5080/tcp"
 ```
 
-For `br0` / custom LAN IP setups, port publishing is usually not needed. Use the container's LAN IP directly:
+For `br0` / custom LAN IP setups, port publishing is usually not required.
 
-```text
-http://CONTAINER-LAN-IP:5080/ServerAdmin/
-```
-
-The default WebAdmin credentials may be defined in `System/Default.ini`, not necessarily in `TacticalOps-Server.ini`.
-
-For the included TO3.4 server pack, the default credentials are commonly:
-
-```text
-Username: admin
-Password: admin
-```
-
-# !! Change these before exposing WebAdmin to your LAN or the internet. !! 
+Change the default credentials before exposing WebAdmin to your LAN or the internet.
 
 ## Docker Compose
 
@@ -282,7 +233,6 @@ networks:
 ```
 
 Change `/mnt/user/appdata/tacticalops34/server` to the location where you want to store the persistent Tactical Ops server files on your Unraid server.
-When using `br0`, port mappings are usually not required because the container has its own IP address.
 
 ## Quirks
 If the game window or mouse behaves strangely on modern Windows, enable: TacticalOps.exe → Properties → Compatibility → Change high DPI settings → Override high DPI scaling behavior → Application. This is a client-side thing.
