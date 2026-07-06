@@ -106,23 +106,23 @@ EOF
     fi
   fi
 
-  # Update Default.ini credentials when available.
-  # Some UT/TO WebAdmin builds use Default.ini instead of the active server INI.
-  if [ -f "${DEFAULT_INI_PATH}" ]; then
-    if grep -qE '^AdminUsername=' "${DEFAULT_INI_PATH}"; then
-      sed -i -E "s/^AdminUsername=.*/AdminUsername=${WEBADMIN_USER}/" "${DEFAULT_INI_PATH}"
-    else
-      echo "AdminUsername not found in Default.ini; leaving username unchanged."
-    fi
+  # Update WebAdmin credentials in Default.ini and the active server INI.
+  # Some UT/TO WebAdmin builds read from Default.ini, others from the active server INI.
+  for CREDENTIALS_INI in "${DEFAULT_INI_PATH}" "${INI_PATH}"; do
+    if [ -f "${CREDENTIALS_INI}" ]; then
+      echo "Updating WebAdmin credentials in: ${CREDENTIALS_INI}"
 
-    if grep -qE '^AdminPassword=' "${DEFAULT_INI_PATH}"; then
-      sed -i -E "s/^AdminPassword=.*/AdminPassword=${WEBADMIN_PASSWORD}/" "${DEFAULT_INI_PATH}"
+      if grep -qE '^AdminUsername=' "${CREDENTIALS_INI}"; then
+        sed -i -E "s/^AdminUsername=.*/AdminUsername=${WEBADMIN_USER}/" "${CREDENTIALS_INI}"
+      fi
+
+      if grep -qE '^AdminPassword=' "${CREDENTIALS_INI}"; then
+        sed -i -E "s/^AdminPassword=.*/AdminPassword=${WEBADMIN_PASSWORD}/" "${CREDENTIALS_INI}"
+      fi
     else
-      echo "AdminPassword not found in Default.ini; leaving password unchanged."
+      echo "WARNING: INI not found: ${CREDENTIALS_INI}"
     fi
-  else
-    echo "WARNING: Default.ini not found: ${DEFAULT_INI_PATH}"
-  fi
+  done
 
   echo "WebAdmin configured."
   echo "WebAdmin URL: http://SERVER-IP:${WEBADMIN_PORT}/ServerAdmin/"
