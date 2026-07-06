@@ -7,6 +7,10 @@ This project provides a small Docker container that installs the required Linux 
 The Tactical Ops server files are **not included in this repository or Docker image**.  
 On first start, the container can download the TO3.4 server package into the mounted `/server` volume.
 
+## Gamefiles
+
+The gamefiles are downloadable here: [TO:AoT Fixed Pack](https://tactical-ops.eu/to-aot-fixed-pack.php) from [tactical-ops.eu](https://www.tactical-ops.eu), so use their guides!
+
 ## Features
 
 - Tactical Ops: Assault on Terror 3.4 dedicated server
