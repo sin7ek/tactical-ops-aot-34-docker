@@ -47,6 +47,15 @@ server/
 └── Readme.txt
 
 ```
+## Ports
+| Port | Protocol | Purpose |
+|---:|---|---|
+| `7777` | UDP | Game port |
+| `7778` | UDP | Query port |
+| `7779` | UDP | Master server uplink / additional query |
+| `6665` | UDP | ACE anti-cheat communication |
+| `5080` | TCP | Web/admin interface, if enabled by server config |
+
 ## Docker Compose
 
 For a normal Docker Compose or Portainer setup, use the included `docker-compose.yml`.
@@ -73,8 +82,9 @@ services:
       - ./server:/server:rw
 
     ports:
-      - "7777-7778:7777-7778/udp"
+      - "7777-7779:7777-7779/udp"
       - "5080:5080/tcp"
+      - "6665:6665/udp"
 
     # Optional Unraid labels:
     # labels:
