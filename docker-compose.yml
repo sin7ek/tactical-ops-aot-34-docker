@@ -11,12 +11,11 @@ services:
       SERVER_INI: "TacticalOps-Server.ini"
       EXTRA_PARAMS: ""
       SYSTEM_DIR: "/server/System"
-      
-      # Webui variables
+
       ENABLE_WEBADMIN: "true"
       WEBADMIN_PORT: "5080"
-      WEBADMIN_USER: "admin" # Webui user, you can change this to something you like.
-      WEBADMIN_PASSWORD: "change-me" # Definately change the password before exposing to the internet!
+      WEBADMIN_USER: "admin"
+      WEBADMIN_PASSWORD: "change-me"
 
     volumes:
       - ./server:/server:rw
@@ -26,7 +25,7 @@ services:
       - "6665:6665/udp"
       - "5080:5080/tcp"
 
-    # Optional Unraid labels:
+    # Optional Unraid labels
     # labels:
     #   net.unraid.docker.webui: "http://[IP]:[PORT:5080]/"
     #   net.unraid.docker.icon: "https://cdn2.steamgriddb.com/logo_thumb/7e2f21ec8c69203309c420fdf06d4012.png"
