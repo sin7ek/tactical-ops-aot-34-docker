@@ -55,10 +55,10 @@ Example:
 
 ```yaml
 services:
-  tactical-ops-34:
+  tactical-ops-aot-34-docker:
     build: .
-    image: tactical-ops-34:local
-    container_name: tactical-ops-34
+    image: tactical-ops-aot-34-docker:local
+    container_name: tactical-ops-aot-34-docker
     restart: unless-stopped
 
     environment:
@@ -102,10 +102,10 @@ Example:
 
 ```yaml
 services:
-  tactical-ops-34:
+  tactical-ops-aot-34-docker:
     build: .
-    image: tactical-ops-34:local
-    container_name: tactical-ops-34
+    image: tactical-ops-aot-34-docker:local
+    container_name: tactical-ops-aot-34-docker
     restart: unless-stopped
 
     environment:
@@ -117,7 +117,7 @@ services:
       SYSTEM_DIR: "/server/System"
 
     volumes:
-      - /mnt/blackpool/appdata/tacticalops34/server:/server:rw
+      - ./server:/server:rw
 
     labels:
       net.unraid.docker.webui: "http://[IP]:[PORT:5080]/"
@@ -125,7 +125,7 @@ services:
 
     networks:
       br0:
-        ipv4_address: 192.168.1.171 # Change this to your desired LAN IP
+        ipv4_address: 192.168.1.100 # Change this to your desired LAN IP
 
 networks:
   br0:
