@@ -121,12 +121,12 @@ services:
       SERVER_INI: "TacticalOps-Server.ini"
       EXTRA_PARAMS: ""
       SYSTEM_DIR: "/server/System"
-
+      
       # Optional WebAdmin variables
       ENABLE_WEBADMIN: "true"
       WEBADMIN_PORT: "5080"
       WEBADMIN_USER: "admin"
-      WEBADMIN_PASSWORD: "change-me"
+      WEBADMIN_PASSWORD: "change-me" # Definitely change this password before exposing WebAdmin.
 
     volumes:
       - ./server:/server:rw
