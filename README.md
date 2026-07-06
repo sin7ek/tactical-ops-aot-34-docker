@@ -90,8 +90,11 @@ docker compose up -d
 
 View logs with:
 
+
+Logs:
+
 ```bash
-docker logs -f tactical-ops-34
+docker logs -f tactical-ops-aot-34-docker
 
 ```
 ## Unraid with br0 / custom LAN IP
@@ -117,7 +120,9 @@ services:
       SYSTEM_DIR: "/server/System"
 
     volumes:
-      - ./server:/server:rw
+      # Host path : Container path
+      # Change the host path (left side, everything before *:/server:rw*) to your own path
+      - /mnt/user/appdata/tacticalops34/server:/server:rw
 
     labels:
       net.unraid.docker.webui: "http://[IP]:[PORT:5080]/"
