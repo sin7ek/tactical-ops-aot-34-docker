@@ -110,14 +110,20 @@ services:
       SERVER_INI: "TacticalOps-Server.ini"
       EXTRA_PARAMS: ""
       SYSTEM_DIR: "/server/System"
+     
+      # Webui variables:
+      ENABLE_WEBADMIN: "true"
+      WEBADMIN_PORT: "5080"
+      WEBADMIN_USER: "admin" # Webadmin user, you can change this to something you like.
+      WEBADMIN_PASSWORD: "change-me" # Definately change the password before exposing to the internet!
 
     volumes:
       - ./server:/server:rw
 
     ports:
       - "7777-7779:7777-7779/udp"
-      - "5080:5080/tcp"
       - "6665:6665/udp"
+      - "5080:5080/tcp"
 
     # Optional Unraid labels:
     # labels:
