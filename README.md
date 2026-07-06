@@ -88,9 +88,6 @@ Start the server with:
 docker compose up -d
 ```
 
-View logs with:
-
-
 Logs:
 
 ```bash
