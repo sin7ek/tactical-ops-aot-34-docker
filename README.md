@@ -60,6 +60,84 @@ server/
 | `6665` | UDP | ACE anti-cheat communication |
 | `5080` | TCP | Web/admin interface, if enabled by server config |
 
+## WebAdmin
+
+The classic UT/TO WebAdmin is available only if it is enabled in the server config.
+
+Open:
+
+```text
+System/TacticalOps-Server.ini
+```
+
+In the `[Engine.GameEngine]` section, make sure this line is enabled:
+
+```ini
+ServerActors=UWeb.WebServer
+```
+
+If it exists with a semicolon in front of it, remove the semicolon:
+
+```ini
+;ServerActors=UWeb.WebServer
+```
+
+becomes:
+
+```ini
+ServerActors=UWeb.WebServer
+```
+
+Also make sure this section exists in `System/TacticalOps-Server.ini`:
+
+```ini
+[UWeb.WebServer]
+Applications[0]=UTServerAdmin.UTServerAdmin
+ApplicationPaths[0]=/ServerAdmin
+Applications[1]=UTServerAdmin.UTImageServer
+ApplicationPaths[1]=/images
+DefaultApplication=0
+bEnabled=True
+ListenPort=5080
+ServerName=TO3.4 Server WebAdmin
+```
+
+Restart the container after changing the config:
+
+```bash
+docker restart tactical-ops-aot-34-docker
+```
+
+Then open:
+
+```text
+http://SERVER-IP:5080/ServerAdmin/
+```
+
+For bridge networking, make sure TCP port `5080` is published in Docker Compose:
+
+```yaml
+ports:
+  - "5080:5080/tcp"
+```
+
+For `br0` / custom LAN IP setups, port publishing is usually not needed. Use the container's LAN IP directly:
+
+```text
+http://CONTAINER-LAN-IP:5080/ServerAdmin/
+```
+
+The default WebAdmin credentials may be defined in `System/Default.ini`, not necessarily in `TacticalOps-Server.ini`.
+
+For the included TO3.4 server pack, the default credentials are commonly:
+
+```text
+Username: admin
+Password: admin
+```
+
+# !! Change these before exposing WebAdmin to your LAN or the internet. !! 
+
 ## Docker Compose
 
 For a normal Docker Compose or Portainer setup, use the included `docker-compose.yml`.
