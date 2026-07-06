@@ -1,7 +1,6 @@
 services:
   tactical-ops-aot-34-docker:
-    build: .
-    image: tactical-ops-aot-34-docker:local
+    image: sin7ek/tactical-ops-aot-34-docker:latest
     container_name: tactical-ops-aot-34-docker
     restart: unless-stopped
 
@@ -12,9 +11,11 @@ services:
       SERVER_INI: "TacticalOps-Server.ini"
       EXTRA_PARAMS: ""
       SYSTEM_DIR: "/server/System"
+      
+      # Webui variables
       ENABLE_WEBADMIN: "true"
       WEBADMIN_PORT: "5080"
-      WEBADMIN_USER: "admin" # Webadmin user, you can change this to something you like.
+      WEBADMIN_USER: "admin" # Webui user, you can change this to something you like.
       WEBADMIN_PASSWORD: "change-me" # Definately change the password before exposing to the internet!
 
     volumes:
