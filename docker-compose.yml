@@ -1,8 +1,8 @@
 services:
-  tactical-ops-34:
+  tactical-ops-aot-34-docker:
     build: .
-    image: tactical-ops-34:local
-    container_name: tactical-ops-34
+    image: tactical-ops-aot-34-docker:local
+    container_name: tactical-ops-aot-34-docker
     restart: unless-stopped
 
     environment:
@@ -17,7 +17,8 @@ services:
       - ./server:/server:rw
 
     ports:
-      - "7777-7778:7777-7778/udp"
+      - "7777-7779:7777-7779/udp"
+      - "6665:6665/udp"
       - "5080:5080/tcp"
 
     # Optional Unraid labels:
