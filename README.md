@@ -241,7 +241,7 @@ services:
       WEBADMIN_PASSWORD: "change-me"
 
     volumes:
-      - /mnt/user/appdata/tacticalops34/server:/server:rw # Change as needed
+      - /mnt/user/appdata/tacticalops34/server:/server:rw
 
     labels:
       net.unraid.docker.webui: "http://[IP]:[PORT:5080]/"
